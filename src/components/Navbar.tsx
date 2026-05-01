@@ -3,6 +3,7 @@ import { ScrollTrigger } from "gsap/ScrollTrigger";
 import HoverLinks from "./HoverLinks";
 import { gsap } from "gsap";
 import { ScrollSmoother } from "gsap/ScrollSmoother";
+import { getScrollSmoothValues, isMobileDevice } from "../utilities/deviceDetection";
 import "./styles/Navbar.css";
 
 gsap.registerPlugin(ScrollSmoother, ScrollTrigger);
@@ -10,14 +11,17 @@ export let smoother: ScrollSmoother;
 
 const Navbar = () => {
   useEffect(() => {
+    const { smooth, speed } = getScrollSmoothValues();
+    const isMobile = isMobileDevice();
+
     smoother = ScrollSmoother.create({
       wrapper: "#smooth-wrapper",
       content: "#smooth-content",
-      smooth: 1.5,
-      speed: 1.5,
+      smooth: smooth,
+      speed: speed,
       effects: true,
       autoResize: true,
-      ignoreMobileResize: true,
+      ignoreMobileResize: isMobile, // More strict on mobile
     });
 
     smoother.scrollTop(0);

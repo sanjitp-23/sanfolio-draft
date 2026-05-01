@@ -1,5 +1,6 @@
 import * as THREE from "three";
 import gsap from "gsap";
+import { isMobileDevice } from "../../utilities/deviceDetection";
 
 export function setCharTimeline(
   character: THREE.Object3D<THREE.Object3DEventMap> | null,
@@ -9,12 +10,16 @@ export function setCharTimeline(
   setInterval(() => {
     intensity = Math.random();
   }, 200);
+
+  const isMobile = isMobileDevice();
+  const scrubValue = isMobile ? 0.5 : 0.8;
+
   const tl1 = gsap.timeline({
     scrollTrigger: {
       trigger: ".landing-section",
       start: "top top",
       end: "bottom top",
-      scrub: 0.8,
+      scrub: scrubValue,
       invalidateOnRefresh: true,
       fastScrollEnd: true,
     },
@@ -24,7 +29,7 @@ export function setCharTimeline(
       trigger: ".about-section",
       start: "center 55%",
       end: "bottom top",
-      scrub: 0.8,
+      scrub: scrubValue,
       invalidateOnRefresh: true,
       fastScrollEnd: true,
     },
@@ -34,7 +39,7 @@ export function setCharTimeline(
       trigger: ".whatIDO",
       start: "top top",
       end: "bottom top",
-      scrub: 0.8,
+      scrub: scrubValue,
       invalidateOnRefresh: true,
       fastScrollEnd: true,
     },
@@ -64,6 +69,8 @@ export function setCharTimeline(
     }
   });
   let neckBone = character?.getObjectByName("spine005");
+  
+  // Desktop animations (still full featured)
   if (window.innerWidth > 1024) {
     if (character) {
       tl1
@@ -122,26 +129,49 @@ export function setCharTimeline(
         .to(character.rotation, { x: -0.04, duration: 2, delay: 1 }, 0);
     }
   } else {
+    // Mobile optimized animations (simpler, faster)
     if (character) {
+      // Simple fade-in for What I Do section on mobile
       const tM2 = gsap.timeline({
         scrollTrigger: {
           trigger: ".what-box-in",
           start: "top 70%",
           end: "bottom top",
+          invalidateOnRefresh: true,
         },
       });
-      tM2.to(".what-box-in", { display: "flex", duration: 0.1, delay: 0 }, 0);
+      tM2.fromTo(
+        ".what-box-in",
+        { display: "none", opacity: 0 },
+        { display: "flex", opacity: 1, duration: 0.3, delay: 0 },
+        0
+      );
+
+      // Subtle character rotation on mobile (less intensive)
+      const tM1 = gsap.timeline({
+        scrollTrigger: {
+          trigger: ".landing-section",
+          start: "top top",
+          end: "center center",
+          scrub: 0.3,
+          invalidateOnRefresh: true,
+        },
+      });
+      tM1.to(character.rotation, { y: 0.3, duration: 1 }, 0);
     }
   }
 }
 
 export function setAllTimeline() {
+  const isMobile = isMobileDevice();
+  const scrubValue = isMobile ? 0.5 : 0.8;
+
   const careerTimeline = gsap.timeline({
     scrollTrigger: {
       trigger: ".career-section",
       start: "top 30%",
       end: "100% center",
-      scrub: 0.8,
+      scrub: scrubValue,
       invalidateOnRefresh: true,
       fastScrollEnd: true,
     },
