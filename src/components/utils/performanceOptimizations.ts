@@ -36,7 +36,6 @@ export function optimizeScrollTriggerRefresh(delay: number = 200) {
     });
   }, delay);
 }
-}
 
 /**
  * Monitor frame rate to detect performance issues
