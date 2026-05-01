@@ -26,7 +26,7 @@ export function enableGPUAcceleration() {
  * Optimize scroll trigger refresh
  * Debounces refresh calls to prevent excessive recalculations
  */
-let refreshTimeout: NodeJS.Timeout | null = null;
+let refreshTimeout: ReturnType<typeof setTimeout> | null = null;
 export function optimizeScrollTriggerRefresh(delay: number = 200) {
   if (refreshTimeout) clearTimeout(refreshTimeout);
   refreshTimeout = setTimeout(() => {
@@ -35,6 +35,7 @@ export function optimizeScrollTriggerRefresh(delay: number = 200) {
       window.dispatchEvent(new Event("resize"));
     });
   }, delay);
+}
 }
 
 /**
@@ -95,13 +96,8 @@ export function throttleScrollUpdates(callback: () => void, delay: number = 16) 
  * Detects device performance and disables heavy animations if needed
  */
 export function detectLowEndDevice(): boolean {
-  // Check available memory
-  if ((navigator.deviceMemory as any)?.valueOf?.() < 4) {
-    return true;
-  }
-
   // Check processor cores
-  if (navigator.hardwareConcurrency < 4) {
+  if (navigator.hardwareConcurrency && navigator.hardwareConcurrency < 4) {
     return true;
   }
 

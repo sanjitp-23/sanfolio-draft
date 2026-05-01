@@ -1,7 +1,6 @@
 import "./styles/Work.css";
 import WorkImage from "./WorkImage";
 import gsap from "gsap";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { useGSAP } from "@gsap/react";
 import { useState, useCallback, useEffect, useRef } from "react";
 import { MdClose, MdChevronLeft, MdChevronRight } from "react-icons/md";
@@ -124,13 +123,6 @@ const Work = () => {
   const [selectedProject, setSelectedProject] = useState<any>(null);
   const [currentIndex, setCurrentIndex] = useState(0);
   const flexRef = useRef<HTMLDivElement>(null);
-
-  // How many cards visible at once depends on screen width
-  const getVisibleCount = useCallback(() => {
-    if (window.innerWidth <= 900) return 1;
-    if (window.innerWidth <= 1400) return 2;
-    return 3;
-  }, []);
 
   // Allow scrolling so every project can be fully visible (last project can be first in view)
   const maxIndex = myProjects.length - 1;
