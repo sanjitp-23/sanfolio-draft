@@ -8,7 +8,7 @@ declare module 'gsap-trial/SplitText' {
   }
 
   class SplitText {
-    constructor(targets: string | Element | Element[], config?: SplitTextConfig);
+    constructor(targets: string | Element | (string | Element)[] | NodeList, config?: SplitTextConfig);
     chars: Element[];
     words: Element[];
     lines: Element[];
